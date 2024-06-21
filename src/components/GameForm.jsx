@@ -59,7 +59,7 @@ export const GameForm = () => {
         })
         .then(response => response.json())
         .then(navigate(`/games`))
-    };
+    }
 
     return (
         <div className="max-w-lg mx-auto mt-10 p-8 border rounded-lg shadow-lg bg-white">

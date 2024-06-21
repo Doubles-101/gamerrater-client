@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
+import { ReviewList } from "./reviews/ReviewList.jsx"
 
 
 export const GameDetail = () => {
     const [gameDetails, setGameDetails] = useState({})
-    const [gameCategories, setGameCategories] = useState([])
+
+    const navigate = useNavigate()
 
     const { gameId } = useParams()
 
@@ -16,6 +18,10 @@ export const GameDetail = () => {
         })
         const parsedJSONString = await response.json()
         setGameDetails(parsedJSONString)
+    }
+
+    const handleReviewGame = () => {
+        navigate(`/games/${gameId}/review`)
     }
 
     useEffect(() => {
@@ -38,6 +44,14 @@ export const GameDetail = () => {
                     ))}
                 </li>
             </ul>
+            <button className="button p-2 m-2 bg-blue-500 text-white" onClick={handleReviewGame}>Review Game</button>
+
+            <div className="mt-4">
+                <h2>Reviews: </h2>
+                    {
+                        <ReviewList gameId={gameId}/>
+                    }
+            </div>
         </div>
     )
 }
