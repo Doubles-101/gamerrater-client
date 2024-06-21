@@ -24,6 +24,10 @@ export const GameDetail = () => {
         navigate(`/games/${gameId}/review`)
     }
 
+    const handleEditButton = () => {
+        navigate(`/games/${gameId}/editgame`)
+    }
+
     useEffect(() => {
         getGameDetailsFromTheApi()
     }, [])
@@ -44,6 +48,9 @@ export const GameDetail = () => {
                     ))}
                 </li>
             </ul>
+
+            {gameDetails.is_owner && <button className="button p-2 m-2 bg-blue-500 text-white" onClick={handleEditButton}>Edit</button>}
+
             <button className="button p-2 m-2 bg-blue-500 text-white" onClick={handleReviewGame}>Review Game</button>
 
             <div className="mt-4">
