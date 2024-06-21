@@ -17,6 +17,10 @@ export const GameList = () => {
         setAllGames(parsedJSONString)
     }
 
+    const handleRegisterNewGame = () => {
+        navigate(`/creategame`)
+    }
+
     useEffect(() => {
         fetchAllGamesFromApi()
     }, [])
@@ -33,6 +37,7 @@ export const GameList = () => {
                 })
             }
         </ul>
+        <button className="button p-2 m-2" onClick={handleRegisterNewGame}>Register New Game</button>
     </div>
     )
 }
