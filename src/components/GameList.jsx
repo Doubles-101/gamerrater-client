@@ -33,12 +33,12 @@ export const GameList = () => {
                 allGames.map(game => {
                     return <li key={`game__${game.id}`}>
                         <NavLink className="text-left underline text-blue-600 hover:text-purple-700" to={`/games/${game.id}`}>{game.title}</NavLink>
-                        <li>Average Rating: {game.average_rating.toFixed(2)}</li>
+                        <li className="text-left text-blue-400 hover:text-purple-700">Average Rating: {game.average_rating.toFixed(2)}</li>
                     </li>
                 })
             }
         </ul>
-        <button className="button p-2 m-2" onClick={handleRegisterNewGame}>Register New Game</button>
+        <button className="button p-2 m-2 bg-blue-500 text-white hover:bg-blue-700" onClick={handleRegisterNewGame}>Register New Game</button>
     </div>
     )
 }
