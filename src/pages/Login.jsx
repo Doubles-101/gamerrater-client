@@ -10,7 +10,6 @@ export const Login = () => {
 
     const handleLogin = (e) => {
         e.preventDefault()
-        debugger
         fetch(`http://localhost:8000/login`, {
             method: "POST",
             body: JSON.stringify({ username, password }),

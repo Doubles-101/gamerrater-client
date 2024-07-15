@@ -6,6 +6,7 @@ import { ReviewList } from "./reviews/ReviewList.jsx"
 export const GameDetail = () => {
     const [gameDetails, setGameDetails] = useState({})
     const [userRating, setUserRating] = useState(0)
+    const [imgString, setImageString] = useState("")
 
     const navigate = useNavigate()
 
@@ -37,6 +38,22 @@ export const GameDetail = () => {
         setGameDetails(parsedJSONString)
     }
 
+    const postGamePicture = async () => {
+        const response = await fetch(`http://localhost:8000/pictures`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Token ${JSON.parse(localStorage.getItem("rock_token")).token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                game_id: gameId,
+                game_image: imgString
+            })
+        })
+        const parsedJSONString = await response.json()
+        navigate('/games')
+    }
+
     const handleReviewGame = () => {
         navigate(`/games/${gameId}/review`)
     }
@@ -52,6 +69,20 @@ export const GameDetail = () => {
     const handleSaveRating = () => {
         postUserRating()
         navigate('/games')
+    }
+
+    const getBase64 = (file, callback) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(file);
+    }
+    
+    const createGameImageString = (event) => {
+        getBase64(event.target.files[0], (base64ImageString) => {
+            console.log("Base64 of file is", base64ImageString);
+    
+            setImageString(base64ImageString)
+        })
     }
 
     useEffect(() => {
@@ -94,6 +125,10 @@ export const GameDetail = () => {
             {userRating !== 0 && <button className="button p-2 m-2 bg-blue-500 text-white" onClick={handleSaveRating}>Save</button>}
 
             {gameDetails.is_owner && <button className="button p-2 m-2 bg-blue-500 text-white" onClick={handleEditButton}>Edit</button>}
+
+            <input type="file" id="game_image" onChange={createGameImageString} />
+            <input type="hidden" name="game_id" value={gameDetails.id} />
+            {imgString !== "" && <button className="button p-2 m-2 bg-blue-500 text-white" onClick={postGamePicture}>Upload</button>}
 
             <button className="button p-2 m-2 bg-blue-500 text-white" onClick={handleReviewGame}>Review Game</button>
 
