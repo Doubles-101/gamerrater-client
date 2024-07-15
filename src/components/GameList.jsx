@@ -4,6 +4,7 @@ import { useNavigate, NavLink } from "react-router-dom"
 
 export const GameList = () => {
     const [allGames, setAllGames] = useState([])
+    const [userSearch, setUserSearch] = useState("")
 
     const navigate = useNavigate()
 
@@ -17,6 +18,20 @@ export const GameList = () => {
         setAllGames(parsedJSONString)
     }
 
+    const handleUserSearch = (event) => {
+        const fetchUserSearch = async () => {
+            const response = await fetch(`http://localhost:8000/games?q=${event.target.value}`, {
+                headers: {
+                    "Authorization": `Token ${JSON.parse(localStorage.getItem("rock_token")).token}`,
+                    "Content-Type": "application/json"
+                }
+            })
+            const parsedJSONString = await response.json()
+            setAllGames(parsedJSONString)
+        }
+        fetchUserSearch()
+    }
+
     const handleRegisterNewGame = () => {
         navigate(`/creategame`)
     }
@@ -28,6 +43,9 @@ export const GameList = () => {
     return (
     <div>
         <h1>All Games</h1>
+
+        <input type="text" id="search" onChange={handleUserSearch} className="bg-white text-black mb-3 mt-3 pl-2" placeholder="Search"/>
+
         <ul>
             {
                 allGames.map(game => {
