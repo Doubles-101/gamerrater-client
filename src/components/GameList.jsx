@@ -5,6 +5,7 @@ import { useNavigate, NavLink } from "react-router-dom"
 export const GameList = () => {
     const [allGames, setAllGames] = useState([])
     const [userSearch, setUserSearch] = useState("")
+    const [selectChoice, setSelectChoice] = useState("")
 
     const navigate = useNavigate()
 
@@ -30,21 +31,51 @@ export const GameList = () => {
             setAllGames(parsedJSONString)
         }
         fetchUserSearch()
+        setUserSearch(event.target.value)
     }
+
+    const handleSelectChange = (event) => {
+        const fetchUserSelect = async () => {
+            const response = await fetch(`http://localhost:8000/games?orderby=${event.target.value}`, {
+                headers: {
+                    "Authorization": `Token ${JSON.parse(localStorage.getItem("rock_token")).token}`,
+                    "Content-Type": "application/json"
+                }
+            })
+            const parsedJSONString = await response.json()
+            setAllGames(parsedJSONString)
+        }
+        fetchUserSelect()
+        setSelectChoice(event.target.value)
+    }
+
+
 
     const handleRegisterNewGame = () => {
         navigate(`/creategame`)
     }
 
+
+
     useEffect(() => {
         fetchAllGamesFromApi()
     }, [])
+
+
+
 
     return (
     <div>
         <h1>All Games</h1>
 
         <input type="text" id="search" onChange={handleUserSearch} className="bg-white text-black mb-3 mt-3 pl-2" placeholder="Search"/>
+
+        <select value={selectChoice} onChange={handleSelectChange}>
+            <option value="" disabled>Select an option</option>
+            <option value="year">Year Release</option>
+            <option value="time">Estimated time to play</option>
+            <option value="designer">Designer</option>
+        </select>
 
         <ul>
             {
